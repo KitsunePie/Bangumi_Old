@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cover">封面</string>
+    <string name="title">标题</string>
+    <string name="description">简介</string>
+    <string name="ep_text">第%s集</string>
+    <string name="watched">已观看</string>
+    <string name="empty">空空如也~</string>
+    <string name="settings">设置</string>
+</resources>

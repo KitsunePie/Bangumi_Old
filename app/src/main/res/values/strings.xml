@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name" translatable="false">Bangumi</string>
+    <string name="cover">Cover</string>
+    <string name="watched">Watched</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="ep_text">Ep: %s</string>
+    <string name="empty">Nothing here~\n</string>
+    <string name="settings">Settings</string>
+</resources>
