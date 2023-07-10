@@ -1,4 +1,4 @@
-<me.kyuubiran.bangumi.view.BangumiCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -84,4 +84,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</me.kyuubiran.bangumi.view.BangumiCardView>
+</androidx.cardview.widget.CardView>
