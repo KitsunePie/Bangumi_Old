@@ -6,15 +6,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
+import androidx.core.view.updateMargins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.databinding.BangumiCardViewBinding
+import me.kyuubiran.bangumi.utils.toDpFloat
+import me.kyuubiran.bangumi.utils.toDpInt
 
-class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) :
-    CardView(context, attributeSet, defStyleAttr) {
+class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : CardView(context, attributeSet) {
 
     private val binding by lazy { BangumiCardViewBinding.inflate(LayoutInflater.from(context), this, true) }
 
@@ -37,6 +39,14 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
                 watchedButtonClicked()
             }
         }
+
+        cardElevation = 4.toDpFloat(this)
+        radius = 8.toDpFloat(this)
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        (layoutParams as MarginLayoutParams).updateMargins(8.toDpInt(this), 4.toDpInt(this), 8.toDpInt(this), 4.toDpInt(this))
     }
 
     private suspend fun watchedButtonClicked() {
@@ -62,5 +72,4 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
             AppDatabase.db.bangumiDao().update(b)
         }()
     }
-
 }
