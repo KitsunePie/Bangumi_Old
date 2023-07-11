@@ -23,12 +23,12 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/bgmcard_button_watched"
+        app:layout_constraintEnd_toStartOf="@+id/bgmcard_end_layout"
         app:layout_constraintStart_toEndOf="@+id/bgmcard_image_cover"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/bgmcard_text_title"
+            android:id="@+id/bgmcard_title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -39,36 +39,49 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/bgmcard_text_description"
+            android:id="@+id/bgmcard_description_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/description"
+            android:maxLines="2"
             android:textColor="#808080"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bgmcard_text_title" />
+            app:layout_constraintTop_toBottomOf="@+id/bgmcard_title_text" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/bgmcard_ep_text"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bgmcard_end_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ep_text"
-        app:layout_constraintBottom_toTopOf="@+id/bgmcard_button_watched"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bgmcard_title_layout"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/bgmcard_button_watched"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/watched"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bgmcard_title_layout"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/bgmcard_ep_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ep_text"
+            app:layout_constraintBottom_toTopOf="@+id/bgmcard_button_watched"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bgmcard_button_watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

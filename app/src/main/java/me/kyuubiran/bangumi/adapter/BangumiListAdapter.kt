@@ -1,6 +1,5 @@
 package me.kyuubiran.bangumi.adapter
 
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -12,18 +11,16 @@ import me.kyuubiran.bangumi.view.BangumiCardView
 class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHolder>() {
     var bangumiList: MutableList<Bangumi> = mutableListOf()
 
-    inner class BangumiViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleTextView: TextView = itemView.findViewById(R.id.bgmcard_text_title)
-        private val descTextView: TextView = itemView.findViewById(R.id.bgmcard_text_description)
-        private val epTextView: TextView = itemView.findViewById(R.id.bgmcard_ep_text)
+    inner class BangumiViewHolder(val bangumiCardView: BangumiCardView) : RecyclerView.ViewHolder(bangumiCardView) {
 
         fun bind(bangumi: Bangumi) {
-            titleTextView.text = bangumi.title
-            descTextView.text = bangumi.desc
+            bangumiCardView.binding.bgmcardTitleText.text = bangumi.title
+            bangumiCardView.binding.bgmcardDescriptionText.text = bangumi.desc
 
             val epText = if (bangumi.episodeMax > 0) "${bangumi.episodeCurrent}/${bangumi.episodeMax}"
             else "${bangumi.episodeCurrent}"
-            epTextView.text = itemView.context.getString(R.string.ep_text, epText)
+            bangumiCardView.binding.bgmcardEpText.text = itemView.context.getString(R.string.ep_text, epText)
+            bangumiCardView.binding.bgmcardButtonWatched.isEnabled = !bangumi.finished
         }
     }
 
@@ -38,7 +35,14 @@ class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHo
 
     override fun onBindViewHolder(holder: BangumiViewHolder, position: Int) {
         val bangumi = bangumiList[position]
-        (holder.itemView as BangumiCardView).bangumi = bangumi
+        (holder.itemView as BangumiCardView).let {
+            it.bangumi = bangumi
+            it.adapter = this
+        }
         holder.bind(bangumi)
+    }
+
+    fun getItemPos(bangumi: Bangumi): Int {
+        return bangumiList.indexOf(bangumi)
     }
 }

@@ -1,6 +1,7 @@
 package me.kyuubiran.bangumi.data
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
@@ -11,8 +12,10 @@ data class Bangumi(
     var episodeMax: Int = -1,
     var tags: MutableList<String> = arrayListOf(),
     /** marks finish watched */
-    var finished: Boolean = false,
-    ) : Comparable<Bangumi> {
+) : Comparable<Bangumi> {
+    val finished
+        get() = episodeCurrent == episodeMax && episodeMax > 0
+
     override fun compareTo(other: Bangumi): Int {
         if (finished != other.finished) {
             return if (finished) 1 else -1

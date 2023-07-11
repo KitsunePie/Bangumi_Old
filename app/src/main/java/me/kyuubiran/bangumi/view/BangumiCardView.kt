@@ -10,17 +10,23 @@ import androidx.core.view.updateMargins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.databinding.BangumiCardViewBinding
+import me.kyuubiran.bangumi.utils.coLaunchIO
+import me.kyuubiran.bangumi.utils.coWithMain
+import me.kyuubiran.bangumi.utils.runSuspend
 import me.kyuubiran.bangumi.utils.toDpFloat
 import me.kyuubiran.bangumi.utils.toDpInt
 
 class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : CardView(context, attributeSet) {
 
-    private val binding by lazy { BangumiCardViewBinding.inflate(LayoutInflater.from(context), this, true) }
+    val binding by lazy { BangumiCardViewBinding.inflate(LayoutInflater.from(context), this, true) }
 
     var bangumi: Bangumi? = null
+    var adapter: BangumiListAdapter? = null
 
     init {
 
@@ -35,7 +41,7 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         }
 
         binding.bgmcardButtonWatched.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            coLaunchIO {
                 watchedButtonClicked()
             }
         }
@@ -53,23 +59,30 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         val b = bangumi ?: run { Log.w("BangumiCardView", "Bangumi was null!"); return }
         val dao = AppDatabase.db.bangumiDao()
 
-        var has = false
+//        val has = runSuspend {
+//            dao.hasBangumi(b.id)
+//        }
+//
+//        if (!has) {
+//            Log.w("BangumiCardView", "No such bangumi found!")
+//            return
+//        }
 
-        suspend {
-            has = dao.hasBangumi(b.id)
-        }()
-
-        if (!has) {
-            Log.w("BangumiCardView", "No such bangumi found!")
+        if (b.finished)
             return
+
+        if (++b.episodeCurrent == b.episodeMax) {
+            Log.i("BangumiCardView", "Finished watch ${b.title}")
         }
 
-        ++b.episodeCurrent
-        if (b.episodeMax > 0 && b.episodeMax < b.episodeCurrent)
-            b.episodeMax = b.episodeCurrent
+//        runSuspend {
+//            dao.update(b)
+//        }
 
-        suspend {
-            AppDatabase.db.bangumiDao().update(b)
-        }()
+        coWithMain {
+            adapter?.let {
+                it.notifyItemChanged(it.getItemPos(b))
+            }
+        }
     }
 }

@@ -15,6 +15,9 @@ import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.databinding.FramgentBangumiListBinding
+import me.kyuubiran.bangumi.utils.coLaunchIO
+import me.kyuubiran.bangumi.utils.coWithMain
+import me.kyuubiran.bangumi.utils.runSuspend
 
 class BangumiListFragment : Fragment() {
 
@@ -34,24 +37,24 @@ class BangumiListFragment : Fragment() {
     }
 
     private fun refresh() {
-        CoroutineScope(Dispatchers.IO).launch {
-            withContext(Dispatchers.Main) {
+        coLaunchIO {
+            coWithMain {
                 binding.mainBgmLayoutSwipeRefreshLayout.isRefreshing = true
             }
 
-            suspend {
+            runSuspend {
                 val db = AppDatabase.db.bangumiDao()
                 val bangumiList: MutableList<Bangumi> = db.getAllBangumis().toMutableList()
                 adapter.bangumiList = bangumiList
 
                 if (bangumiList.isEmpty()) {
-                    adapter.bangumiList.add(Bangumi("狐妖小红娘", "来相思树下", 48, 148))
-                    adapter.bangumiList.add(Bangumi("我推的狐狸", "喵喵", 1, 12))
+                    adapter.bangumiList.add(Bangumi("狐妖小红娘", "来相思树下", 48, 148).apply { id = 1L })
+                    adapter.bangumiList.add(Bangumi("我推的狐狸", "喵喵", 1, 12).apply { id = 2L })
                     Log.d("BangumiListFragment", "Bangumi was empty")
                 }
-            }()
+            }
 
-            withContext(Dispatchers.Main) {
+            coWithMain {
                 adapter.notifyDataSetChanged()
                 binding.mainBgmLayoutSwipeRefreshLayout.isRefreshing = false
                 Log.d("BangumiListFragment", "Data refreshed: size=${adapter.itemCount}")
