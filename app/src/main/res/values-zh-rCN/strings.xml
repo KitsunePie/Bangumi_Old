@@ -8,4 +8,18 @@
     <string name="empty">空空如也~</string>
     <string name="settings">设置</string>
     <string name="mark">标记</string>
+    <string name="episode">集</string>
+    <string name="ep_current">当前集数</string>
+    <string name="ep_total">总集数</string>
+    <string name="add">添加</string>
+    <string name="discard_changes">放弃更改</string>
+    <string name="discard_changes_message">你真的要放弃修改吗？</string>
+    <string name="discard">放弃</string>
+    <string name="comfirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="edit_with">修改 “%s”</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    <string name="image">图片</string>
 </resources>

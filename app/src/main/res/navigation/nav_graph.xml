@@ -7,8 +7,19 @@
 
     <fragment
         android:id="@+id/BangumiListFragment"
-        android:name="me.kyuubiran.bangumi.BangumiListFragment"
+        android:name="me.kyuubiran.bangumi.fragment.BangumiListFragment"
         android:label="first"
         tools:layout="@layout/framgent_bangumi_list">
+        <action
+            android:id="@+id/action_BangumiListFragment_to_bangumiModifyFragment"
+            app:destination="@id/bangumiModifyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bangumiModifyFragment"
+        android:name="me.kyuubiran.bangumi.fragment.BangumiModifyFragment"
+        android:label="BangumiModifyFragment" >
+        <action
+            android:id="@+id/action_bangumiModifyFragment_to_BangumiListFragment"
+            app:destination="@id/BangumiListFragment" />
     </fragment>
 </navigation>

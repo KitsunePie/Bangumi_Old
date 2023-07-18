@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/modify_bangumi_cover_image"
+            android:layout_width="120dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/baseline_add_circle_12_light"
+            android:contentDescription="@string/cover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/modify_bangumi_title_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/title"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/modify_bangumi_epcur_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/ep_current"
+            android:inputType="number"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
+            app:layout_constraintTop_toBottomOf="@+id/modify_bangumi_title_et"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/modify_bangumi_eptotal_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/ep_total"
+            android:inputType="number"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
+            app:layout_constraintTop_toBottomOf="@+id/modify_bangumi_epcur_et"
+            tools:ignore="Autofill" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/modify_bangumi_desc_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/description"
+        android:inputType="text"
+        android:minLines="5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:ignore="Autofill" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bangmu_modify_save_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/baseline_save_24"
+        android:contentDescription="@string/save" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

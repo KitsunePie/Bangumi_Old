@@ -2,7 +2,7 @@ package me.kyuubiran.bangumi.utils
 
 import androidx.room.TypeConverter
 
-class ListStringConverter {
+class StringListConverter {
     @TypeConverter
     fun fromString(value: String?): MutableList<String> {
         return value?.split(",")?.toMutableList() ?: mutableListOf()
