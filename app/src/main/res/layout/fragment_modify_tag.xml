@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="8dp">
+
+    <me.kyuubiran.bangumi.view.ClickableItem
+        android:id="@+id/modify_tag_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/name" />
+
+    <me.kyuubiran.bangumi.view.ClickableItem
+        android:id="@+id/modify_tag_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modify_tag_name"
+        app:showRightArray="false"
+        app:title="@string/color" />
+
+    <me.kyuubiran.bangumi.view.ClickableItem
+        android:id="@+id/modify_tag_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modify_tag_color"
+        app:title="@string/priority" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/modify_tag_save_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/baseline_save_24" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

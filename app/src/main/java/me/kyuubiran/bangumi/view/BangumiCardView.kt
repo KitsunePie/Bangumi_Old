@@ -13,8 +13,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.BangumiListAdapter
+import me.kyuubiran.bangumi.adapter.CardTagListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.databinding.BangumiCardViewBinding
@@ -30,8 +33,45 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
 
     val binding by lazy { BangumiCardViewBinding.inflate(LayoutInflater.from(context), this, true) }
 
-    lateinit var bangumi: Bangumi
-    lateinit var adapter: BangumiListAdapter
+    private val tagListAdapter: CardTagListAdapter = CardTagListAdapter()
+    private lateinit var _bangumi: Bangumi
+
+    private val nav by lazy { findNavController() }
+
+    var bangumi: Bangumi
+        set(value) {
+            _bangumi = value
+            tagListAdapter.setTags(value.tags)
+        }
+        get() = _bangumi
+
+
+    lateinit var bangumiListAdapter: BangumiListAdapter
+
+    init {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setOnLongClickListener {
+            showEditDialog()
+            true
+        }
+
+        binding.bgmcardTagRecyclerView.adapter = tagListAdapter
+        binding.bgmcardTagRecyclerView.layoutManager = LinearLayoutManager(context).apply {
+            orientation = LinearLayoutManager.HORIZONTAL
+        }
+
+        binding.bgmcardButtonWatched.setOnClickListener {
+            coLaunchIO {
+                watchedButtonClicked()
+            }
+        }
+
+        cardElevation = 4.toDpFloat(this)
+        radius = 8.toDpFloat(this)
+    }
 
     private fun showEditDialog() {
         val edit = ImageTextButton(context).apply {
@@ -67,39 +107,21 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
 
         edit.setOnClickListener {
             BangumiModifyFragment.bangumiInEdit = bangumi
-            adapter.fragment.navController.navigate(R.id.action_BangumiListFragment_to_bangumiModifyFragment)
+            nav.navigate(R.id.action_BangumiListFragment_to_bangumiModifyFragment)
             dialog.dismiss()
         }
 
         delete.setOnClickListener {
-            BangumiModifyFragment.bangumiInEdit = null
-            val pos = adapter.getItemPos(bangumi)
-            if (pos > 0) adapter.notifyItemRemoved(pos)
-            coLaunchIO {
-                runSuspend { AppDatabase.db.bangumiDao().delete(bangumi) }
-            }
-            dialog.dismiss()
-        }
-    }
-
-    init {
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        setOnLongClickListener {
-            showEditDialog()
-            true
-        }
-
-        binding.bgmcardButtonWatched.setOnClickListener {
-            coLaunchIO {
-                watchedButtonClicked()
+            DialogUtils.showConfirmDialog(
+                context,
+                context.getString(R.string.delete_with, bangumi.title),
+                context.getString(R.string.delete_with_message, bangumi.title)
+            ) {
+                BangumiModifyFragment.bangumiInEdit = null
+                coLaunchIO { bangumiListAdapter.removeItem(bangumi) }
+                dialog.dismiss()
             }
         }
-
-        cardElevation = 4.toDpFloat(this)
-        radius = 8.toDpFloat(this)
     }
 
     private val titleLayoutConstraintSet by lazy {
@@ -144,14 +166,14 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
     private suspend fun watchedButtonClicked() {
         val dao = AppDatabase.db.bangumiDao()
 
-//        val has = runSuspend {
-//            dao.hasBangumi(bangumi.id)
-//        }
-//
-//        if (!has) {
-//            Log.w("BangumiCardView", "No such bangumi found!")
-//            return
-//        }
+        val has = runSuspend {
+            dao.hasBangumi(bangumi.id)
+        }
+
+        if (!has) {
+            Log.w("BangumiCardView", "No such bangumi found!")
+            return
+        }
 
         if (bangumi.finished)
             return
@@ -165,7 +187,7 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         }
 
         coWithMain {
-            adapter.let {
+            bangumiListAdapter.let {
                 it.notifyItemChanged(it.getItemPos(bangumi))
             }
         }

@@ -5,7 +5,15 @@
         <attr name="image" format="reference" />
     </declare-styleable>
 
-    <declare-styleable name="TagView">
+    <declare-styleable name="BangumiCardTagView">
         <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ClickableItem">
+        <attr name="title" format="string" />
+        <attr name="subtitle" format="string" />
+        <attr name="showRightArray" format="boolean" />
+        <attr name="minHeight" format="dimension" />
+        <attr name="minWidth" format="dimension" />
     </declare-styleable>
 </resources>

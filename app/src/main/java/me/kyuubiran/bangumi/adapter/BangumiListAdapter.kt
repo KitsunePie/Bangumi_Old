@@ -3,7 +3,7 @@ package me.kyuubiran.bangumi.adapter
 import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import me.kyuubiran.bangumi.MyApp
+import kotlinx.coroutines.delay
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
@@ -17,14 +17,14 @@ import me.kyuubiran.bangumi.view.BangumiCardView
 class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHolder>() {
     private var bangumiShowList: MutableList<Bangumi> = mutableListOf()
     private var filter: (Bangumi.() -> Boolean)? = null
-    lateinit var fragment: BangumiListFragment
 
     var bangumiList: MutableList<Bangumi> = mutableListOf()
         set(value) {
             field = value
             filter?.let { bangumiShowList = value.filter(it).toMutableList() } ?: run { bangumiShowList = value }
+            bangumiShowList.sort()
 
-            coLaunchMain { runSuspend { notifyDataSetChanged() } }
+            coLaunchMain { notifyDataSetChanged() }
         }
 
     inner class BangumiViewHolder(private val bangumiCardView: BangumiCardView) : RecyclerView.ViewHolder(bangumiCardView) {
@@ -49,13 +49,41 @@ class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHo
             Log.i("BangumiListAdapter", "Inserted: ${b.id}")
         }
 
-        bangumiList.add(0, b)
-        bangumiShowList.add(0, b)
+        bangumiList.add(b)
+        bangumiShowList.add(b)
+
+        return b
+    }
+
+    suspend fun removeItem(bangumi: Bangumi) {
+        val pos = getItemPos(bangumi)
+
+        if (pos < 0) {
+            Log.w("BangumiListAdapter", "removeItem: Item not found")
+            return
+        }
+
+        val pos2 = bangumiList.indexOfFirst { it.id == bangumi.id }
+        if (pos2 >= 0)
+            bangumiList.removeAt(pos2)
 
         coWithMain {
-            notifyItemInserted(0)
+            Log.d("BangumiListAdapter", "removeItem: notify removed at $pos")
+            notifyItemRemoved(pos)
+//            TODO: Fix this
+//            I don't know why it cause stupid crash, it seems works fine but may cause mem leak because the element still in the list
+//            java.lang.IndexOutOfBoundsException: Inconsistency detected. Invalid view holder adapter positionBangumiViewHolder{dcbd207 position=0 id=-1, oldPos=1, pLpos:1 scrap [attachedScrap] tmpDetached no parent} androidx.recyclerview.widget.RecyclerView{d340f37 VFED..... ......I. 0,0-1080,786 #7f08010f app:id/main_bgm_layout}, adapter:me.kyuubiran.bangumi.adapter.BangumiListAdapter@3f1f7be, layout:androidx.recyclerview.widget.LinearLayoutManager@276901f, context:me.kyuubiran.bangumi.MainActivity@6f8bfad
+//            Fuck stupid android fuck stupid google
+
+//            bangumiShowList.removeAt(pos)
         }
-        return b
+
+        coWithIO {
+            val db = AppDatabase.db.bangumiDao()
+            db.delete(bangumi)
+
+            Log.i("BangumiListAdapter", "Deleted: ${bangumi.id}")
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BangumiViewHolder {
@@ -71,21 +99,17 @@ class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHo
         val bangumi = bangumiShowList[position]
         (holder.itemView as BangumiCardView).let {
             it.bangumi = bangumi
-            it.adapter = this
+            it.bangumiListAdapter = this
         }
         holder.bind(bangumi)
     }
 
     fun getItemPos(bangumi: Bangumi): Int {
-        var idx = bangumiShowList.indexOf(bangumi)
-        if (idx < 0)
-            idx = bangumiShowList.indexOfFirst { it.id == bangumi.id }
-
-        return idx
+        return bangumiShowList.indexOfFirst { it.id == bangumi.id }
     }
 
-    fun applyFilter(filter: (Bangumi.() -> Boolean)?) {
+    suspend fun applyFilter(filter: (Bangumi.() -> Boolean)?) {
         filter?.let { bangumiShowList = bangumiList.filter(it).toMutableList() } ?: run { bangumiShowList = bangumiList }
-        notifyDataSetChanged()
+        coWithMain { notifyDataSetChanged() }
     }
 }

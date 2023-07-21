@@ -7,85 +7,64 @@
     android:layout_height="match_parent"
     android:padding="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/modify_bangumi_cover_image"
-            android:layout_width="120dp"
-            android:layout_height="160dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/baseline_add_circle_12_light"
-            android:contentDescription="@string/cover"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/modify_bangumi_title_et"
-            android:layout_width="0dp"
+        <me.kyuubiran.bangumi.view.ClickableItem
+            app:showRightArray="false"
+            app:minHeight="80dp"
+            android:id="@+id/cover_clickable"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/title"
-            android:inputType="text"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="Autofill" />
+            app:title="@string/cover" />
 
-        <EditText
-            android:id="@+id/modify_bangumi_epcur_et"
-            android:layout_width="0dp"
+        <me.kyuubiran.bangumi.view.ClickableItem
+            android:id="@+id/title_clickable"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ep_current"
-            android:inputType="number"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/modify_bangumi_title_et"
-            tools:ignore="Autofill" />
+            app:title="@string/title" />
 
-        <EditText
-            android:id="@+id/modify_bangumi_eptotal_et"
-            android:layout_width="0dp"
+        <me.kyuubiran.bangumi.view.ClickableItem
+            android:id="@+id/desc_clickable"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ep_total"
-            android:inputType="number"
-            android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/modify_bangumi_cover_image"
-            app:layout_constraintTop_toBottomOf="@+id/modify_bangumi_epcur_et"
-            tools:ignore="Autofill" />
+            app:title="@string/description" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <me.kyuubiran.bangumi.view.ClickableItem
+            android:id="@+id/curep_clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/ep_current" />
 
-    <EditText
-        android:id="@+id/modify_bangumi_desc_et"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/description"
-        android:inputType="text"
-        android:minLines="5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:ignore="Autofill" />
+        <me.kyuubiran.bangumi.view.ClickableItem
+            android:id="@+id/ttlep_clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/ep_total" />
+
+        <me.kyuubiran.bangumi.view.ClickableItem
+            android:id="@+id/tags_clickable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/tags" />
+
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/bangmu_modify_save_fab"
+        android:id="@+id/bangumi_modify_save_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:contentDescription="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/baseline_save_24"
-        android:contentDescription="@string/save" />
+        app:srcCompat="@drawable/baseline_save_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

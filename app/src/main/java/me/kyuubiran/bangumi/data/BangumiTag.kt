@@ -1,20 +1,19 @@
 package me.kyuubiran.bangumi.data
 
 import android.os.Parcel
-import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import androidx.versionedparcelable.ParcelField
 import kotlinx.serialization.Serializable
 import me.kyuubiran.bangumi.utils.Colors
 
 @Entity
 @Serializable
-data class Tag(
+data class BangumiTag(
     var name: String,
     var priority: Int = 0,
     var color: Int = Colors.ORANGE
-) : Comparable<Tag> {
+) : Comparable<BangumiTag> {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
@@ -26,17 +25,17 @@ data class Tag(
         id = parcel.readInt()
     }
 
-    override fun compareTo(other: Tag): Int {
-        return priority.compareTo(other.priority)
+    override fun compareTo(other: BangumiTag): Int {
+        return other.priority.compareTo(priority)
     }
 
-    companion object CREATOR : Parcelable.Creator<Tag> {
-        override fun createFromParcel(parcel: Parcel): Tag {
-            return Tag(parcel)
-        }
+    companion object {
+        @JvmStatic
+        @Ignore
+        var allTagMap: MutableMap<Int, BangumiTag> = mutableMapOf()
 
-        override fun newArray(size: Int): Array<Tag?> {
-            return arrayOfNulls(size)
-        }
+        @get:Ignore
+        val allTagList: List<BangumiTag>
+            get() = allTagMap.values.toMutableList().apply { sort() }
     }
 }

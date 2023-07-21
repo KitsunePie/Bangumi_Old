@@ -1,5 +1,7 @@
 package me.kyuubiran.bangumi.utils
 
+import android.graphics.Color
+
 object Colors {
-    const val ORANGE = 0xFF9800
+    val ORANGE = Color.parseColor("#FF9800")
 }

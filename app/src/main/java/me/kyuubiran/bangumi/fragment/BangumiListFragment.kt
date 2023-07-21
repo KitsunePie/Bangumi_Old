@@ -18,18 +18,16 @@ import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.Bangumi
+import me.kyuubiran.bangumi.data.BangumiTag
 import me.kyuubiran.bangumi.databinding.FramgentBangumiListBinding
 import me.kyuubiran.bangumi.utils.coLaunchIO
 import me.kyuubiran.bangumi.utils.coWithMain
-import me.kyuubiran.bangumi.utils.runSuspend
 
 class BangumiListFragment : Fragment() {
     private var _binding: FramgentBangumiListBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = BangumiListAdapter().apply {
-        fragment = this@BangumiListFragment
-    }
+    private val adapter = BangumiListAdapter()
     private lateinit var lm: LinearLayoutManager
 
     val navController by lazy { findNavController() }
@@ -41,7 +39,7 @@ class BangumiListFragment : Fragment() {
         _binding = FramgentBangumiListBinding.inflate(inflater, container, false)
         lm = LinearLayoutManager(context)
 
-        binding.bangmuListAddFab.setOnClickListener {
+        binding.bangumiListAddFab.setOnClickListener {
             coLaunchIO {
                 val item = adapter.newItem()
                 BangumiModifyFragment.bangumiInEdit = item
@@ -59,17 +57,11 @@ class BangumiListFragment : Fragment() {
                 binding.mainBgmLayoutSwipeRefreshLayout.isRefreshing = true
             }
 
-            runSuspend {
-                val db = AppDatabase.db.bangumiDao()
-                val bangumiList: MutableList<Bangumi> = db.getAllBangumis().toMutableList()
-                adapter.bangumiList = bangumiList
-//                For test
-//                if (bangumiList.isEmpty()) {
-//                    adapter.bangumiList.add(Bangumi("狐妖小红娘", "来相思树下", 48, 148).apply { id = 1L })
-//                    adapter.bangumiList.add(Bangumi("我推的狐狸", "喵喵", 1, 12).apply { id = 2L })
-//                    Log.d("BangumiListFragment", "Bangumi was empty")
-//                }
-            }
+            val db = AppDatabase.db.bangumiDao()
+            val bangumiList: MutableList<Bangumi> = db.getAllBangumis().toMutableList()
+            adapter.bangumiList = bangumiList
+
+            BangumiTag.allTagMap = AppDatabase.db.tagDao().getAllTags().associateBy { it.id }.toMutableMap()
 
             coWithMain {
                 adapter.notifyDataSetChanged()
@@ -91,6 +83,11 @@ class BangumiListFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.action_settings -> true
+                    R.id.action_manage_tags -> {
+                        navController.navigate(R.id.action_BangumiListFragment_to_tagListFragment)
+                        true
+                    }
+
                     else -> false
                 }
             }

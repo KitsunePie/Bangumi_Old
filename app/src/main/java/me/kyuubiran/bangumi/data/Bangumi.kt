@@ -10,9 +10,9 @@ data class Bangumi(
     var title: String,
     var desc: String = "",
     var currentEpisode: Int = 1,
-    var totalEpisode: Int = -1,
-    var offset: Int = 0,
-    var tags: MutableList<Tag> = mutableListOf(),
+    var totalEpisode: Int = 0,
+    // Tag ids
+    var tags: MutableList<Int> = mutableListOf(),
     /** marks finish watched */
 ) : Comparable<Bangumi> {
     val finished
@@ -23,7 +23,7 @@ data class Bangumi(
             return if (finished) 1 else -1
         }
 
-        return id.compareTo(other.id)
+        return other.id.compareTo(id)
     }
 
     @PrimaryKey(autoGenerate = true)
