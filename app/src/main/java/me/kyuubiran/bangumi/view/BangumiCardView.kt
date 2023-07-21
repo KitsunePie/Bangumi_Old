@@ -23,6 +23,7 @@ import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.databinding.BangumiCardViewBinding
 import me.kyuubiran.bangumi.fragment.BangumiModifyFragment
 import me.kyuubiran.bangumi.utils.DialogUtils
+import me.kyuubiran.bangumi.utils.Utils
 import me.kyuubiran.bangumi.utils.coLaunchIO
 import me.kyuubiran.bangumi.utils.coWithMain
 import me.kyuubiran.bangumi.utils.runSuspend
@@ -42,6 +43,11 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         set(value) {
             _bangumi = value
             tagListAdapter.setTags(value.tags)
+            val cover = Utils.getCoverImage(context, bangumi)
+            if (cover != null) {
+                binding.bgmcardCoverImage.setImageBitmap(cover)
+            }
+            requestLayout()
         }
         get() = _bangumi
 

@@ -1,16 +1,22 @@
 package me.kyuubiran.bangumi.fragment
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.ScrollView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.forEach
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -22,10 +28,13 @@ import me.kyuubiran.bangumi.data.Bangumi
 import me.kyuubiran.bangumi.data.BangumiTag
 import me.kyuubiran.bangumi.databinding.FragmentModifiyBangumiBinding
 import me.kyuubiran.bangumi.utils.DialogUtils
+import me.kyuubiran.bangumi.utils.Utils
 import me.kyuubiran.bangumi.utils.coLaunchIO
 import me.kyuubiran.bangumi.utils.coWithMain
 import me.kyuubiran.bangumi.utils.toDpInt
+import me.kyuubiran.bangumi.view.ImageTextButton
 import me.kyuubiran.bangumi.view.TagSelectableItem
+import java.io.File
 
 class BangumiModifyFragment : Fragment() {
     private var _binding: FragmentModifiyBangumiBinding? = null
@@ -39,6 +48,8 @@ class BangumiModifyFragment : Fragment() {
     private val navController by lazy { findNavController() }
 
     private val tagList: MutableList<Int> = mutableListOf()
+
+    private lateinit var coverImageView: ImageView
 
     private fun applyChanges() {
         coLaunchIO {
@@ -73,6 +84,74 @@ class BangumiModifyFragment : Fragment() {
         }
     }
 
+    private fun showEditCoverDialog(ctx: Context) {
+        val pic = bangumiInEdit?.let { Utils.getCoverImage(ctx, it) }
+        val has = pic != null
+
+        val removeCover = ImageTextButton(ctx).apply {
+            text = getString(R.string.remove_cover)
+            drawable = AppCompatResources.getDrawable(ctx, R.drawable.baseline_delete_forever_24)
+        }
+
+        val setCover = ImageTextButton(ctx).apply {
+            text = getString(R.string.select_from_file)
+            drawable = AppCompatResources.getDrawable(ctx, R.drawable.baseline_file_copy_24)
+        }
+
+        val dialog = DialogUtils.showAlertDialog(ctx) {
+            setTitle(getString(R.string.set_cover))
+
+            val ll = LinearLayout(ctx).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+
+                updatePadding(16.toDpInt(context), 8.toDpInt(context), 16.toDpInt(context), 8.toDpInt(context))
+
+                gravity = LinearLayout.HORIZONTAL
+                orientation = LinearLayout.VERTICAL
+
+                if (has)
+                    addView(removeCover)
+
+                addView(setCover)
+            }
+
+            setView(ll)
+        }
+
+        removeCover.setOnClickListener {
+            DialogUtils.showConfirmDialog(ctx, getString(R.string.remove_cover), getString(R.string.remove_cover_message)) {
+                val bgm = bangumiInEdit ?: return@showConfirmDialog
+                Utils.deleteCoverImage(ctx, bgm)
+                coverImageView.setImageDrawable(null)
+                dialog.dismiss()
+            }
+        }
+
+        setCover.setOnClickListener {
+            dialog.dismiss()
+            pickCover()
+        }
+    }
+
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        val bgm = bangumiInEdit ?: return@registerForActivityResult
+        Log.d("BangumiModifyFragment", "uri: $uri, path: ${uri.path}")
+
+        val inputStream = requireContext().contentResolver.openInputStream(uri)
+        inputStream?.use { input ->
+            Utils.saveCoverImage(requireContext(), bgm, input)
+        }
+        coverImageView.setImageBitmap(Utils.getCoverImage(requireContext(), bgm))
+    }
+
+    private fun pickCover() {
+        getContent.launch("image/*")
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentModifiyBangumiBinding.inflate(inflater, container, false)
 
@@ -82,9 +161,23 @@ class BangumiModifyFragment : Fragment() {
             }
         }
 
+        coverImageView = ImageView(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                80.toDpInt(requireContext()),
+                120.toDpInt(requireContext())
+            )
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.bangumiModifySaveFab.setOnClickListener { applyChanges() }
+
+        binding.coverClickable.rightLayout.addView(coverImageView)
+        coverImageView.setImageBitmap(bangumiInEdit?.let { Utils.getCoverImage(requireContext(), it) })
+
+        binding.coverClickable.setOnClickListener {
+            showEditCoverDialog(requireContext())
+        }
 
         binding.titleClickable.setOnClickListener {
             DialogUtils.showEditTextDialog(requireContext(), getString(R.string.set_title), bangumiInEdit?.title) {

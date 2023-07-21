@@ -40,4 +40,8 @@
     <string name="offset">Offset</string>
     <string name="tags">Tags</string>
     <string name="set_tags">Set tags</string>
+    <string name="set_cover">Set cover</string>
+    <string name="remove_cover">Remove cover</string>
+    <string name="select_from_file">Select from file…</string>
+    <string name="remove_cover_message">Do you want to remove the cover?</string>
 </resources>
