@@ -44,7 +44,7 @@ class BangumiListAdapter : RecyclerView.Adapter<BangumiListAdapter.BangumiViewHo
 
         coWithIO {
             val db = AppDatabase.db.bangumiDao()
-            db.insert(b)
+            db.insert(b).also { b.id = it }
 
             Log.i("BangumiListAdapter", "Inserted: ${b.id}")
         }

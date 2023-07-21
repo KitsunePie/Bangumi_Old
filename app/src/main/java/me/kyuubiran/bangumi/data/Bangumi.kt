@@ -12,7 +12,7 @@ data class Bangumi(
     var currentEpisode: Int = 1,
     var totalEpisode: Int = 0,
     // Tag ids
-    var tags: MutableList<Int> = mutableListOf(),
+    var tags: MutableList<Long> = mutableListOf(),
     /** marks finish watched */
 ) : Comparable<Bangumi> {
     val finished

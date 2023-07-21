@@ -1,6 +1,5 @@
 package me.kyuubiran.bangumi.data
 
-import android.os.Parcel
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
@@ -15,15 +14,7 @@ data class BangumiTag(
     var color: Int = Colors.ORANGE
 ) : Comparable<BangumiTag> {
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-
-    constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readInt()
-    ) {
-        id = parcel.readInt()
-    }
+    var id: Long = 0
 
     override fun compareTo(other: BangumiTag): Int {
         return other.priority.compareTo(priority)
@@ -32,7 +23,7 @@ data class BangumiTag(
     companion object {
         @JvmStatic
         @Ignore
-        var allTagMap: MutableMap<Int, BangumiTag> = mutableMapOf()
+        var allTagMap: MutableMap<Long, BangumiTag> = mutableMapOf()
 
         @get:Ignore
         val allTagList: List<BangumiTag>

@@ -38,7 +38,10 @@ class FragmentTagListAdapter : RecyclerView.Adapter<FragmentTagListAdapter.TagVi
 
     suspend fun newItem(): BangumiTag {
         val tag = BangumiTag("Tag")
-        coWithIO { AppDatabase.db.tagDao().insert(tag) }
+        coWithIO {
+            val db = AppDatabase.db.tagDao()
+            db.insert(tag).also { tag.id = it }
+        }
         BangumiTag.allTagMap[tag.id] = tag
         tagList.add(tag)
 

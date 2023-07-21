@@ -8,7 +8,7 @@ import me.kyuubiran.bangumi.view.BangumiCardTagView
 class CardTagListAdapter : RecyclerView.Adapter<CardTagListAdapter.TagViewHolder>() {
     private var tagList: MutableList<BangumiTag> = mutableListOf()
 
-    fun setTags(list: List<Int>) {
+    fun setTags(list: List<Long>) {
         tagList.clear()
         for (i in list) {
             if (BangumiTag.allTagMap.containsKey(i)) tagList.add(BangumiTag.allTagMap[i]!!)

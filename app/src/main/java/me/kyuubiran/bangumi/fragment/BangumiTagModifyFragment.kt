@@ -9,10 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.data.AppDatabase
 import me.kyuubiran.bangumi.data.BangumiTag
@@ -23,7 +24,6 @@ import me.kyuubiran.bangumi.utils.coLaunchIO
 import me.kyuubiran.bangumi.utils.toDpInt
 import me.kyuubiran.bangumi.view.CircleView
 import me.kyuubiran.bangumi.view.ColorPickerView
-import java.lang.Exception
 
 class BangumiTagModifyFragment : Fragment() {
     companion object {
@@ -50,12 +50,16 @@ class BangumiTagModifyFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentModifyTagBinding.inflate(inflater, container, false)
 
+        requireActivity().findViewById<MaterialToolbar>(R.id.toolbar).apply {
+            title = getString(R.string.edit_with, tagInEdit?.name ?: "<Unknown>")
+        }
+
         tagInEdit?.let {
             binding.modifyTagName.subtitleText = it.name
             binding.modifyTagColor.subtitleText = it.color.colorStr()
             binding.modifyTagPriority.subtitleText = it.priority.toString()
             colorView.setCircleColor(it.color)
-        }
+        } ?: kotlin.run { Log.e("BangumiTagModifyFragment", "tagInEdit is null!") }
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -71,9 +75,12 @@ class BangumiTagModifyFragment : Fragment() {
                 tag.color = runCatching { Color.parseColor(binding.modifyTagColor.subtitleText.toString()) }.getOrElse { tag.color }
                 tag.priority = binding.modifyTagPriority.subtitleText.toString().toIntOrNull() ?: tag.priority
 
-                coLaunchIO { AppDatabase.db.tagDao().update(tag) }
+                coLaunchIO {
+                    AppDatabase.db.tagDao().update(tag)
+                    Log.d("BangumiTagModifyFragment", "Updated ${Json.encodeToString(tag)}}")
+                }
                 nav.navigateUp()
-            }
+            } ?: kotlin.run { Log.e("BangumiTagModifyFragment", "tagInEdit is null!") }
         }
 
         binding.modifyTagColor.rightLayout.addView(colorView)

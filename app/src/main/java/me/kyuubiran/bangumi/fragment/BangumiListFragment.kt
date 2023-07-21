@@ -8,12 +8,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
@@ -38,6 +40,10 @@ class BangumiListFragment : Fragment() {
     ): View {
         _binding = FramgentBangumiListBinding.inflate(inflater, container, false)
         lm = LinearLayoutManager(context)
+
+        requireActivity().findViewById<MaterialToolbar>(R.id.toolbar).apply {
+            title = getString(R.string.app_name)
+        }
 
         binding.bangumiListAddFab.setOnClickListener {
             coLaunchIO {
@@ -75,6 +81,7 @@ class BangumiListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val menuHost: MenuHost = requireActivity()
+
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_main, menu)

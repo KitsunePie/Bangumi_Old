@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.appbar.MaterialToolbar
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.FragmentTagListAdapter
 import me.kyuubiran.bangumi.data.AppDatabase
@@ -33,6 +34,10 @@ class BangumiTagListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentTagListBinding.inflate(inflater, container, false)
         lm = LinearLayoutManager(context)
+
+        requireActivity().findViewById<MaterialToolbar>(R.id.toolbar).apply {
+            title = getString(R.string.manage_tags)
+        }
 
         binding.tagListAddFab.setOnClickListener {
             coLaunchIO {

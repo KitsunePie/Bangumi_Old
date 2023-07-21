@@ -21,6 +21,7 @@ import androidx.core.view.forEach
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.serialization.json.Json
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.data.AppDatabase
@@ -47,7 +48,7 @@ class BangumiModifyFragment : Fragment() {
 
     private val navController by lazy { findNavController() }
 
-    private val tagList: MutableList<Int> = mutableListOf()
+    private val tagList: MutableList<Long> = mutableListOf()
 
     private lateinit var coverImageView: ImageView
 
@@ -63,7 +64,7 @@ class BangumiModifyFragment : Fragment() {
                 val db = AppDatabase.db.bangumiDao()
                 db.update(it)
                 Log.d("BangumiModifyFragment", "Updated: ${Json.encodeToString(Bangumi.serializer(), it)}")
-            }
+            } ?: run { Log.e("BangumiModifyFragment", "bangumiInEdit is null") }
             coWithMain {
                 bangumiInEdit = null
                 navController.navigateUp()
@@ -154,6 +155,10 @@ class BangumiModifyFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentModifiyBangumiBinding.inflate(inflater, container, false)
+
+        requireActivity().findViewById<MaterialToolbar>(R.id.toolbar).apply {
+            title = getString(R.string.edit_with, bangumiInEdit?.title ?: "<Unknown>")
+        }
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
