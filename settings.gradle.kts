@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Bangumi"
-include ':app'
+include(":app")
