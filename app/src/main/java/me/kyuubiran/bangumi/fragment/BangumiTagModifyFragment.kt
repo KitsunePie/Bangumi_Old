@@ -11,7 +11,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.kyuubiran.bangumi.R
@@ -142,14 +141,15 @@ class BangumiTagModifyFragment : Fragment() {
 
     private fun onNavUp() {
         requireActivity().runOnUiThread {
-            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.discard_changes)
-                .setMessage(R.string.discard_changes_message)
-                .setPositiveButton(R.string.discard) { _, _ ->
+            DialogUtils.showAlertDialog(requireContext()) {
+                setTitle(R.string.discard_changes)
+                setMessage(R.string.discard_changes_message)
+                setPositiveButton(R.string.discard) { _, _ ->
                     BangumiModifyFragment.bangumiInEdit = null
                     nav.navigateUp()
                 }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+                setNegativeButton(R.string.cancel, null)
+            }
         }
     }
 }

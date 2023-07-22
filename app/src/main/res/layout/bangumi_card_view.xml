@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="135dp"
     android:foreground="?android:selectableItemBackground"
+    android:minHeight="135dp"
     android:padding="8dp">
 
     <ImageView
@@ -47,13 +47,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/description"
             android:maxLines="2"
-            tools:lines="2"
+            android:text="@string/description"
             android:textColor="#808080"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bgmcard_title_text" />
+            app:layout_constraintTop_toBottomOf="@+id/bgmcard_title_text"
+            tools:lines="2" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bgmcard_tag_recycler_view"
@@ -75,6 +75,7 @@
         android:id="@+id/bgmcard_end_layout"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginEnd="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/bgmcard_title_layout"
@@ -90,11 +91,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/bgmcard_button_watched"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mark"
+            app:cornerRadius="50dp"
+            app:elevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -14,7 +14,6 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.adapter.CardTagListAdapter
@@ -74,8 +73,9 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
             }
         }
 
-        cardElevation = 4.toDpFloat(this)
-        radius = 8.toDpFloat(this)
+        setCardBackgroundColor(resources.getColor(R.color.forground, context.theme))
+        cardElevation = 0f
+        radius = 10.toDpFloat(this)
     }
 
     private fun showEditDialog() {
@@ -142,14 +142,6 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         }
 
         first to second
-    }
-
-    private fun showLongPressDialog() {
-        MaterialAlertDialogBuilder(this.context).apply {
-            setTitle(bangumi.title)
-
-            show()
-        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
