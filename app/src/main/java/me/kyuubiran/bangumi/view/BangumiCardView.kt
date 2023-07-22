@@ -43,7 +43,7 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
         set(value) {
             _bangumi = value
             tagListAdapter.setTags(value.tags)
-            val cover = Utils.getCoverImage(context, bangumi)
+            val cover = Utils.getCoverImage(context, value)
             if (cover != null) {
                 binding.bgmcardCoverImage.setImageBitmap(cover)
             }

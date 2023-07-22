@@ -185,20 +185,21 @@ class BangumiModifyFragment : Fragment() {
         }
 
         binding.titleClickable.setOnClickListener {
-            DialogUtils.showEditTextDialog(requireContext(), getString(R.string.set_title), bangumiInEdit?.title) {
+            DialogUtils.showEditTextDialog(requireContext(), getString(R.string.set_title), binding.titleClickable.subtitleText.toString()) {
                 binding.titleClickable.subtitleText = it
             }
         }
 
         binding.descClickable.setOnClickListener {
-            DialogUtils.showEditTextDialog(requireContext(), getString(R.string.set_desc), bangumiInEdit?.desc) {
+            DialogUtils.showEditTextDialog(requireContext(), getString(R.string.set_desc), binding.descClickable.subtitleText.toString()) {
                 binding.descClickable.subtitleText = it
             }
         }
 
         binding.curepClickable.setOnClickListener {
             DialogUtils.showEditTextDialog(
-                requireContext(), getString(R.string.set_curep), bangumiInEdit?.currentEpisode?.toString(),
+                requireContext(), getString(R.string.set_curep),
+                binding.curepClickable.subtitleText.toString(),
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) {
                 binding.curepClickable.subtitleText = it.ifBlank { bangumiInEdit?.currentEpisode?.toString() ?: "1" }
@@ -207,7 +208,8 @@ class BangumiModifyFragment : Fragment() {
 
         binding.ttlepClickable.setOnClickListener {
             DialogUtils.showEditTextDialog(
-                requireContext(), getString(R.string.set_ttlep), bangumiInEdit?.totalEpisode?.toString(),
+                requireContext(), getString(R.string.set_ttlep),
+                binding.ttlepClickable.subtitleText.toString(),
                 inputType = InputType.TYPE_CLASS_NUMBER
             ) {
                 binding.ttlepClickable.subtitleText = it.ifBlank { bangumiInEdit?.totalEpisode?.toString() ?: "0" }
