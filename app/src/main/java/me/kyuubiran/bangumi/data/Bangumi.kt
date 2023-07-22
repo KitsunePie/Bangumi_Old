@@ -1,7 +1,9 @@
 package me.kyuubiran.bangumi.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Entity
@@ -12,9 +14,12 @@ data class Bangumi(
     var currentEpisode: Int = 1,
     var totalEpisode: Int = 0,
     // Tag ids
-    var tags: MutableList<Long> = mutableListOf(),
+    @ColumnInfo(name = "tags")
+    @SerialName("tags")
+    var baseTags: String = "",
     /** marks finish watched */
 ) : Comparable<Bangumi> {
+
     val finished
         get() = currentEpisode == totalEpisode && totalEpisode > 0
 
@@ -25,6 +30,17 @@ data class Bangumi(
 
         return other.id.compareTo(id)
     }
+
+    // Tag ids
+    var tags
+        get() = baseTags.takeIf { it.isNotBlank() }
+            ?.split("|")
+            ?.takeIf { it.isNotEmpty() }
+            ?.map { it.toLong() }
+            ?.toMutableList() ?: mutableListOf()
+        set(value) {
+            baseTags = value.joinToString("|")
+        }
 
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0

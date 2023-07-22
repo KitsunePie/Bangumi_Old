@@ -13,6 +13,7 @@ data class BangumiTag(
     var priority: Int = 0,
     var color: Int = Colors.ORANGE
 ) : Comparable<BangumiTag> {
+
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
@@ -21,6 +22,7 @@ data class BangumiTag(
     }
 
     companion object {
+
         @JvmStatic
         @Ignore
         var allTagMap: MutableMap<Long, BangumiTag> = mutableMapOf()
