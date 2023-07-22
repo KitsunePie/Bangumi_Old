@@ -1,6 +1,5 @@
 package me.kyuubiran.bangumi.fragment
 
-import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
@@ -12,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.kyuubiran.bangumi.R
@@ -99,7 +99,7 @@ class BangumiTagModifyFragment : Fragment() {
                 runCatching {
                     picker.setColor(Color.parseColor(binding.modifyTagColor.subtitleText.toString()))
                 }.onFailure {
-                    Log.w("BangumiTagModifyFragment", "Failed to parse color: ${binding.modifyTagColor.subtitleText.toString()}")
+                    Log.w("BangumiTagModifyFragment", "Failed to parse color: ${binding.modifyTagColor.subtitleText}")
                 }
 
                 setNegativeButton(R.string.cancel, null)
@@ -121,7 +121,7 @@ class BangumiTagModifyFragment : Fragment() {
 //                    binding.modifyTagColor.subtitleText = color
 //                } catch (e: Exception) {
 //                    Log.w("BangumiTagModifyFragment", "Failed to parse color: $color")
-////                    Snackbar.make(container!!, getString(R.string.color_parse_error, color), Snackbar.LENGTH_SHORT).show()
+// //                    Snackbar.make(container!!, getString(R.string.color_parse_error, color), Snackbar.LENGTH_SHORT).show()
 //                }
 //            }
         }
@@ -142,7 +142,7 @@ class BangumiTagModifyFragment : Fragment() {
 
     private fun onNavUp() {
         requireActivity().runOnUiThread {
-            AlertDialog.Builder(requireContext()).setTitle(R.string.discard_changes)
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.discard_changes)
                 .setMessage(R.string.discard_changes_message)
                 .setPositiveButton(R.string.discard) { _, _ ->
                     BangumiModifyFragment.bangumiInEdit = null

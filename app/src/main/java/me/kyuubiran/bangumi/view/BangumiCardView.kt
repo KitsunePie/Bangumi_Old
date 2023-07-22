@@ -1,6 +1,5 @@
 package me.kyuubiran.bangumi.view
 
-import android.app.AlertDialog
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
@@ -15,6 +14,7 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.adapter.BangumiListAdapter
 import me.kyuubiran.bangumi.adapter.CardTagListAdapter
@@ -50,7 +50,6 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
             requestLayout()
         }
         get() = _bangumi
-
 
     lateinit var bangumiListAdapter: BangumiListAdapter
 
@@ -146,7 +145,7 @@ class BangumiCardView @JvmOverloads constructor(context: Context, attributeSet: 
     }
 
     private fun showLongPressDialog() {
-        AlertDialog.Builder(this.context).apply {
+        MaterialAlertDialogBuilder(this.context).apply {
             setTitle(bangumi.title)
 
             show()

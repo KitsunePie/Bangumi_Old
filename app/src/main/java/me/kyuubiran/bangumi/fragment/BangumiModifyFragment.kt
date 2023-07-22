@@ -1,8 +1,6 @@
 package me.kyuubiran.bangumi.fragment
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
@@ -22,6 +20,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.serialization.json.Json
 import me.kyuubiran.bangumi.R
 import me.kyuubiran.bangumi.data.AppDatabase
@@ -35,7 +34,6 @@ import me.kyuubiran.bangumi.utils.coWithMain
 import me.kyuubiran.bangumi.utils.toDpInt
 import me.kyuubiran.bangumi.view.ImageTextButton
 import me.kyuubiran.bangumi.view.TagSelectableItem
-import java.io.File
 
 class BangumiModifyFragment : Fragment() {
     private var _binding: FragmentModifiyBangumiBinding? = null
@@ -74,7 +72,7 @@ class BangumiModifyFragment : Fragment() {
 
     private fun onNavUp() {
         requireActivity().runOnUiThread {
-            AlertDialog.Builder(requireContext()).setTitle(R.string.discard_changes)
+            MaterialAlertDialogBuilder(requireContext()).setTitle(R.string.discard_changes)
                 .setMessage(R.string.discard_changes_message)
                 .setPositiveButton(R.string.discard) { _, _ ->
                     bangumiInEdit = null
@@ -217,7 +215,6 @@ class BangumiModifyFragment : Fragment() {
         }
 
         binding.tagsClickable.setOnClickListener {
-
             DialogUtils.showAlertDialog(requireContext()) {
                 setTitle(R.string.set_tags)
 

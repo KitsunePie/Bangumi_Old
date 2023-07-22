@@ -1,16 +1,17 @@
 package me.kyuubiran.bangumi.utils
 
-import android.app.AlertDialog
 import android.content.Context
 import android.text.InputFilter
 import android.text.InputType
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import me.kyuubiran.bangumi.R
 
 object DialogUtils {
-    inline fun showAlertDialog(ctx: Context, func: AlertDialog.Builder.() -> Unit): AlertDialog = AlertDialog.Builder(ctx).apply(func).show()
+    inline fun showAlertDialog(ctx: Context, func: MaterialAlertDialogBuilder.() -> Unit): AlertDialog = MaterialAlertDialogBuilder(ctx).apply(func).show()
 
     fun showEditTextDialog(
         ctx: Context,
@@ -65,8 +66,7 @@ object DialogUtils {
         message: String,
         cancelable: Boolean = true,
         onConfirm: () -> Unit
-    ): AlertDialog = showAlertDialog(ctx)
-    {
+    ): AlertDialog = showAlertDialog(ctx) {
         setTitle(title)
         setMessage(message)
         setCancelable(cancelable)
